@@ -1,0 +1,23 @@
+{
+  "name": "mailer",
+  "authors": [
+    "artem.zaholodilo <azaholodilo@gmail.com>"
+  ],
+  "description": "email sender application",
+  "main": "web/app.php",
+  "moduleType": [],
+  "keywords": [
+    "mail",
+    "rabbitmq",
+    "symfony"
+  ],
+  "license": "MIT",
+  "homepage": "null",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
