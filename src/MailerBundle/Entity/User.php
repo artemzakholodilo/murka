@@ -97,7 +97,7 @@ class User implements UserInterface
      * @return string The password
      */
     public function getPassword()
-    { 
+    {
         return $this->password;
     }
 
