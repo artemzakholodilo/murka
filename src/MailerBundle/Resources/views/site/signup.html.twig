@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{# {% block body %}
+    <div id="login-page" class="row">
+        <div class="col s12 z-depth-4 card-panel">
+            <div class="row margin">
+                <div class="col s9 offset-s3">
+                    <h5>Create your account</h5>
+                </div>
+            </div>
+            <form class="login-form" method="POST" action="{{ path('signup') }}">
+                <div class="row margin">
+                    <div class="input-field col s6 offset-s3">
+                        <i class="mdi-social-person-outline prefix"></i>
+                        <input id="email" type="text" name="email" tabindex="1" />
+                        <label for="username" class="center-align">Email</label>
+                    </div>
+                </div>
+                <div class="row margin">
+                    <div class="input-field col s6 offset-s6">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">
+                            Sign up
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+#}
+
+{% block body %}
+{% form_theme form 'form/fields.html.twig' %}
+
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.password) }}
+
+    <div class="row margin">
+        <div class="input-field col s7 offset-s5">
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                Sign up
+            </button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

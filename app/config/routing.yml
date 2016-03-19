@@ -1,1 +1,2 @@
-
+mailer:
+    resource: '@MailerBundle/Resources/config/routing.yml'

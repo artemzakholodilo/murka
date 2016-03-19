@@ -1,3 +1,20 @@
-mailer_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: MailerBundle:Default:index }
+site:
+    path: /
+    defaults: { _controller: MailerBundle:Site:index }
+
+email:
+    path: /email
+    defaults: { _controller: MailerBundle:Email:index }
+
+send_email:
+    path: /email/send
+    defaults: { _controller: mailer.email_controller:sendAction }
+    methods: [POST]
+
+login:
+    path: /login
+    defaults: { _controller: MailerBundle:Site:login }
+
+signup:
+    path: /signup
+    defaults: { _controller: MailerBundle:Site:signup }

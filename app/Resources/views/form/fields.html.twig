@@ -1,0 +1,8 @@
+{% block form_widget_simple %}
+    <div class="row margin">
+        <div class="input-field col s6 offset-s3">
+            {% set type = type|default('text') %}
+            <input type="{{ type }}" label="{{ label }}" {{ block('widget_attributes') }} />
+        </div>
+    </div>
+{% endblock %}

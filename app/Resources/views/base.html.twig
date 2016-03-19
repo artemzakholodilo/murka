@@ -1,13 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="stylesheet" href="/css/main.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <nav>
+        <div class="nav-wrapper purple darken-2">
+            <a href="" class="brand-logo">Email sender</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class="waves-effect deep-purple btn" href="{{ path('signup') }}">
+                        <span class="deep-purple">Sign up</span>
+                    </a></li>
+                <li><a class="waves-effect deep-purple btn" href="{{ path('login') }}">
+                        <span class="deep-purple">Login</span>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+    {% block body %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</div>
+<footer class="page-footer purple darken-2">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Emailsender corp.</h5>
+                <p class="grey-text text-lighten-4">All rights reserved</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © {{ 'now' | date('Y') }} Emailsender corp.
+        </div>
+    </div>
+</footer>
+</body>
 </html>
