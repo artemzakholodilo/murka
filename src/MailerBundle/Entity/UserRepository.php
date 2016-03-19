@@ -7,8 +7,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Class UserRepository
+ * @package MailerrBundle\Entity
+ */
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
+    /**
+     * @param string $username
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function loadUserByUsername($username)
     {
         return $this->createQueryBuilder('u')
@@ -18,6 +27,10 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             ->getOneOrNullResult();
     }
 
+    /**
+     * @param UserInterface $user
+     * @return null|object
+     */
     public function refreshUser(UserInterface $user)
     {
         $class = get_class($user);
@@ -33,6 +46,10 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         return $this->find($user->getId());
     }
 
+    /**
+     * @param string $class
+     * @return bool
+     */
     public function supportsClass($class)
     {
         return $this->getEntityName() === $class
