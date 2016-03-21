@@ -1,7 +1,7 @@
 security:
     encoders:
-        MailerBundle\Entity\User:
-            algorithm: bcrypt
+        MailerBundle\Entity\User: bcrypt
+#            algorithm: bcrypt
 
     providers:
         db_provider:
@@ -19,4 +19,5 @@ security:
             provider: db_provider
 
     access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/email, roles: ROLE_USER }
