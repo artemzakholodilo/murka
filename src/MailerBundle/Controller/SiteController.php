@@ -2,11 +2,14 @@
 
 namespace MailerBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use MailerBundle\Entity\Role;
 use MailerBundle\Entity\User;
 use MailerBundle\Form\UserType;
 use MailerBundle\Entity\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class SiteController extends Controller
 {
@@ -47,13 +50,10 @@ class SiteController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $role = $this->getDoctrine()
+            /*$role = $this->getDoctrine()
                          ->getRepository('MailerBundle:Role')
                          ->find(1);
-            $userRole = new UserRole();
-            var_dump($role); exit;
-            $userRole->setRoleId($role->getId());
-            $user->addUserRole($userRole);
+            $user->setUserRoles(new ArrayCollection([$role]));
 
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
@@ -61,11 +61,21 @@ class SiteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
-            $em->flush();
+            $em->flush();*/
+            $role = new Role();
+            $role->setName('ROLE_USER');
 
-            $userRole->setUserId($user->getId());
+            $em = $this->getDoctrine()->getManager();
 
-            $em->persist($userRole);
+             $em->persist($role);
+
+            $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
+            $password = $encoder->encodePassword('admin', md5(time()));
+            $user->setPassword($password);
+
+            $user->getUserRoles()->add($role);
+            $em->persist($user);
+
             $em->flush();
 
             return $this->redirectToRoute('email');

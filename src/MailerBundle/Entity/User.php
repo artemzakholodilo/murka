@@ -2,6 +2,7 @@
 
 namespace MailerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,14 +36,23 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users", cascade={"all"})
-     */
-    private $roles;
-
-    /**
-     * @ORM\OneToMany(targetEntity="UserRole", mappedBy="user", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="user_roles",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $userRoles
      */
     private $userRoles;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->userRoles = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -87,18 +97,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return array The user roles
-     */
-    public function getRoles()
-    {
-        $roles = [];
-        foreach ($this->userRoles as $userRole) {
-            $roles[] = $userRole->getRole();
-        }
-        return $roles;
-    }
-
-    /**
      * @return string The password
      */
     public function getPassword()
@@ -134,18 +132,21 @@ class User implements UserInterface
     {
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getUserRoles()
     {
         return $this->userRoles;
     }
 
-    public function setUserRoles($userRoles = [])
+    public function getRoles()
     {
-        $this->userRoles = $userRoles;
+        $this->getUserRoles()->toArray();
     }
 
-    public function addUserRole(UserRole $role)
+    public function equals(UserInterface $user)
     {
-        $this->userRoles[] = $role;
+        return md5($this->getUsername()) === md5($user->getUsername());
     }
 }

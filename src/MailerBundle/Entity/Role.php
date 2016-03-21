@@ -2,7 +2,6 @@
 
 namespace MailerBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,76 +9,42 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Role
  * @package MailerBundle\Entity
  * @ORM\Entity()
- * @ORM\Table(name="roles")
+ * @ORM\Table(name="role")
  */
 class Role implements RoleInterface
 {
     /**
-     * @var integer
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var string
-     * @ORM\Column(name="name", type="string", length=30)
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string $name
      */
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(name="role", type="string", length=20, unique=true)
+     * @ORM\Column(type="datetime", name="created_at")
+     *
+     * @var DateTime $createdAt
      */
-    private $role;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="UserRole", mappedBy="roles")
-     */
-    private $users;
+    protected $createdAt;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
-    }
-    /**
-     * Returns the role.
-     *
-     * This method returns a string representation whenever possible.
-     *
-     * When the role cannot be represented with sufficient precision by a
-     * string, it should return null.
-     *
-     * @return string|null A string representation of the role, or null
-     */
-    public function getRole()
-    {
-        return $this->role;
+        $this->createdAt = new \DateTime();
     }
 
     /**
-     * @param string $role
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-    }
-
-    /**
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -99,34 +64,33 @@ class Role implements RoleInterface
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getUsers()
+    public function getCreatedAt()
     {
-        return $this->users;
+        return $this->createdAt;
     }
 
     /**
-     * @param mixed $users
+     * @param \DateTime $createdAt
      */
-    public function setUsers($users)
+    public function setCreatedAt(\DateTime $createdAt)
     {
-        $this->users = $users;
+        $this->createdAt = $createdAt;
     }
 
     /**
-     * @param User $user
+     * Returns the role.
+     *
+     * This method returns a string representation whenever possible.
+     *
+     * When the role cannot be represented with sufficient precision by a
+     * string, it should return null.
+     *
+     * @return string|null A string representation of the role, or null
      */
-    public function addUser(User $user)
+    public function getRole()
     {
-        $this->users[] = $user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function removeUser(User $user)
-    {
-        $this->users->removeElement($user);
+        return $this->name;
     }
 }
