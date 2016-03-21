@@ -9,6 +9,7 @@ use MailerBundle\Form\UserType;
 use MailerBundle\Entity\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class SiteController extends Controller
@@ -50,18 +51,6 @@ class SiteController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /*$role = $this->getDoctrine()
-                         ->getRepository('MailerBundle:Role')
-                         ->find(1);
-            $user->setUserRoles(new ArrayCollection([$role]));
-
-            $password = $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();*/
             $role = new Role();
             $role->setName('ROLE_USER');
 
@@ -70,13 +59,14 @@ class SiteController extends Controller
              $em->persist($role);
 
             $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
-            $password = $encoder->encodePassword('admin', md5(time()));
+            $password = $encoder->encodePassword($user->getPassword(), md5(time()));
             $user->setPassword($password);
 
             $user->getUserRoles()->add($role);
             $em->persist($user);
-
             $em->flush();
+
+            $this->setToken($user, $request);
 
             return $this->redirectToRoute('email');
         }
@@ -86,5 +76,18 @@ class SiteController extends Controller
                 'form' => $form->createView()
             ]
         );
+    }
+
+    private function setToken(User $user, Request $request)
+    {
+        $token = new UsernamePasswordToken(
+            $user->getUsername(),
+            $user->getPassword(),
+            'main',
+            $user->getRoles()
+        );
+        $this->get('security.context')->setToken($token);
+        $request->getSession()->set('_security_secured_area', serialize($token));
+
     }
 }

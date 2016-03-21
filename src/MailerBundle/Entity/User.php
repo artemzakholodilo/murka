@@ -140,9 +140,12 @@ class User implements UserInterface
         return $this->userRoles;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
-        $this->getUserRoles()->toArray();
+        return $this->getUserRoles()->toArray();
     }
 
     public function equals(UserInterface $user)
