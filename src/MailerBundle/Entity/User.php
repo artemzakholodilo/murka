@@ -35,14 +35,14 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @var array
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users", cascade={"all"})
      */
     private $roles;
 
-    public function __construct()
-    {
-        $this->roles = ['ROLE_USER'];
-    }
+    /**
+     * @ORM\OneToMany(targetEntity="UserRole", mappedBy="user", cascade={"all"})
+     */
+    private $userRoles;
 
     /**
      * @return string
@@ -91,7 +91,11 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $roles = [];
+        foreach ($this->userRoles as $userRole) {
+            $roles[] = $userRole->getRole();
+        }
+        return $roles;
     }
 
     /**
@@ -128,5 +132,20 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    public function getUserRoles()
+    {
+        return $this->userRoles;
+    }
+
+    public function setUserRoles($userRoles = [])
+    {
+        $this->userRoles = $userRoles;
+    }
+
+    public function addUserRole(UserRole $role)
+    {
+        $this->userRoles[] = $role;
     }
 }

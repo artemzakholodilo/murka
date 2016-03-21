@@ -4,6 +4,7 @@ namespace MailerBundle\Controller;
 
 use MailerBundle\Entity\User;
 use MailerBundle\Form\UserType;
+use MailerBundle\Entity\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,6 +47,13 @@ class SiteController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $role = $this->getDoctrine()
+                         ->getRepository('MailerBundle:Role')
+                         ->find(1);
+            $userRole = new UserRole();
+            var_dump($role); exit;
+            $userRole->setRoleId($role->getId());
+            $user->addUserRole($userRole);
 
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
@@ -53,6 +61,11 @@ class SiteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
+            $em->flush();
+
+            $userRole->setUserId($user->getId());
+
+            $em->persist($userRole);
             $em->flush();
 
             return $this->redirectToRoute('email');
