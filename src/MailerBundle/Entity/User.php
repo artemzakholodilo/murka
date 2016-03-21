@@ -70,7 +70,6 @@ class User implements UserInterface
         $this->name = $name;
     }
 
-
     /**
      * @return int
      */
@@ -148,6 +147,10 @@ class User implements UserInterface
         return $this->getUserRoles()->toArray();
     }
 
+    /**
+     * @param UserInterface $user
+     * @return bool
+     */
     public function equals(UserInterface $user)
     {
         return md5($this->getUsername()) === md5($user->getUsername());

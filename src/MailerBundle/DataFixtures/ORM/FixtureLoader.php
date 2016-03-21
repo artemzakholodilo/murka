@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class FixtureLoader implements FixtureInterface
 {
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $role = new Role();

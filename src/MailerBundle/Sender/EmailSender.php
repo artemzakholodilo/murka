@@ -8,18 +8,23 @@ class EmailSender extends AbstractSender
 {
     protected $transport;
 
-    private $userName = 'azaholodilo@gmail.com';
-
     /**
      * EmailSender constructor.
      * @param \Swift_Mailer $mailer
      * @param \Swift_SmtpTransport $smtpTransport
+     * @param $name
+     * @param $password
      */
-    public function __construct(\Swift_Mailer $mailer, \Swift_SmtpTransport $smtpTransport)
+    public function __construct(
+        \Swift_Mailer $mailer,
+        \Swift_SmtpTransport $smtpTransport,
+        $name,
+        $password
+    )
     {
         $transport = $smtpTransport::newInstance('gmail')
-            ->setUsername($this->userName)
-            ->setPassword('db1708j30a2');
+            ->setUsername($name)
+            ->setPassword($password);
 
         $this->transport = $mailer::newInstance($transport);
     }

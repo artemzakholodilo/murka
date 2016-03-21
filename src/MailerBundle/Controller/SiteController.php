@@ -22,7 +22,10 @@ class SiteController extends Controller
         return $this->render('MailerBundle:Site:index.html.twig');
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function loginAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
@@ -78,6 +81,10 @@ class SiteController extends Controller
         );
     }
 
+    /**
+     * @param User $user
+     * @param Request $request
+     */
     private function setToken(User $user, Request $request)
     {
         $token = new UsernamePasswordToken(
