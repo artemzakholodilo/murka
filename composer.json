@@ -18,13 +18,15 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "videlalvaro/php-amqplib": "*",
-        "ircmaxell/password-compat": "~1.0"
+        "ircmaxell/password-compat": "~1.0",
+        "php-amqplib/php-amqplib": "2.5.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "~2.7",
         "phpunit/phpunit": "*",
-        "doctrine/doctrine-fixtures-bundle": "*"
+        "doctrine/doctrine-fixtures-bundle": "*",
+        "guzzle/guzzle": "~3.7"
     },
     "scripts": {
         "post-install-cmd": [

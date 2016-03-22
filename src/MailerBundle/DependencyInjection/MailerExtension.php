@@ -20,7 +20,7 @@ class MailerExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $container->setDefinition('mailer.emailsender', new Definition('MailerBundle\Sender\EmailSender',[
+        $container->setDefinition('mailer.emailsender', new Definition('MailerBundle\Sender\MailSender',[
             new Reference('swiftmailer.mailer'),
             $container->getParameter('mailer_user'),
             $container->getParameter('mailer_password')

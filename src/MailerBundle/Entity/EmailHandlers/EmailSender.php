@@ -2,13 +2,13 @@
 
 namespace MailerBundle\Entity\EmailHandler;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class EmailSender extends AMQPHandler
 {
     /**
-     * @var AMQPConnection
+     * @var AMQPStreamConnection
      */
     private $connection;
 

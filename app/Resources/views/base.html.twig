@@ -16,12 +16,18 @@
         <div class="nav-wrapper purple darken-2">
             <a href="" class="brand-logo">Email sender</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {% if is_granted('ROLE_USER') %}
+                <li><a class="waves-effect deep-purple btn" href="{{ logout_path('main') }}">
+                <span class="deep-purple">Logout</span>
+                </a></li>
+                {% else %}
                 <li><a class="waves-effect deep-purple btn" href="{{ path('signup') }}">
-                        <span class="deep-purple">Sign up</span>
-                    </a></li>
+                     <span class="deep-purple">Sign up</span>
+                </a></li>
                 <li><a class="waves-effect deep-purple btn" href="{{ path('login') }}">
                         <span class="deep-purple">Login</span>
                     </a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>

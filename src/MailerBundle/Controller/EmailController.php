@@ -50,23 +50,29 @@ class EmailController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $notification->setBody($request->request->get('subject'), $user);
         $notification->setSubject($request->request->get('body'));
+        $notification->setTo($request->request->get('to'));
+
+        $data = $notification->toJson($this->sender->getMail());
 
         $amqpSender = new EmailSender();
-        $message = $amqpSender->send($notification->toJson());
+        $message = $amqpSender->send($data);
 
         $receiver = new EmailReceiver($this->sender);
         $receiver->receive($message);
 
-        var_dump($message); exit;
-
-        try {
+        /*try {
             $this->sender->send($notification);
         } catch (\Exception $ex) {
             $this->render('MailerBundle:Email:error.html.twig', [
                 'message' => $ex->getMessage()
             ]);
-        }
+        }*/
 
-        $this->render('MailerBundle:Email:success.html.twig');
+        $this->redirectToRoute('email_success');
+    }
+
+    public function successAction()
+    {
+        return $this->render('MailerBundle:Email:success.html.twig');
     }
 }

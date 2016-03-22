@@ -18,3 +18,12 @@ login:
 signup:
     path: /signup
     defaults: { _controller: MailerBundle:Site:signup }
+
+logout:
+    path: /logout
+    defaults: { _controller: MailerBundle:Site:logout }
+
+email_success:
+    path: /email/success
+    defaults: { _controller: mailer.email_controller:successAction }
+    methods: [GET]

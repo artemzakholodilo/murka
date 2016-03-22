@@ -2,26 +2,36 @@
 
 {% block body %}
     <div class="row">
-        <form class="col s12" action="{{ path('send_email') }}" method="POST">
+        <div class="col s12">
+        <form action="{{ path('send_email') }}" method="post">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="to">To</label>
+                    <input id="subject" type="email" name="to" tabindex="1" />
+                </div>
+            </div>
             <div class="row">
                 <div class="input-field col s12">
                     <label for="subject">Subject</label>
-                    <input id="subject" type="text" name="subject" />
+                    <input id="subject" type="text" name="subject" tabindex="2" />
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
                     <label for="body">Message body</label>
-                    <textarea id="body" name="body" class="materialize-textarea"></textarea>
+                    <textarea id="body" name="body" class="materialize-textarea" tabindex="3" >
+
+                    </textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <button type="submit" class="btn waves-effect waves-light">
+                    <button type="submit" class="btn waves-effect waves-light" tabindex="4">
                         <i class="material-icons right">Send email</i>
                     </button>
                 </div>
             </div>
         </form>
+        </div>
     </div>
 {% endblock %}

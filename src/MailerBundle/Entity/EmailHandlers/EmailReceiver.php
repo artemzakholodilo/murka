@@ -2,31 +2,36 @@
 
 namespace MailerBundle\Entity\EmailHandler;
 
-use MailerBundle\Sender\EmailSender;
-use PhpAmqpLib\Connection\AMQPConnection;
+use MailerBundle\Sender\MailSender;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class EmailReceiver extends AMQPHandler
 {
     /**
-     * @var AMQPConnection
+     * @var AMQPStreamConnection $connection
      */
     private $connection;
 
     /**
-     * @var EmailSender
+     * @var MailSender $sender
      */
     private $sender;
 
     /**
      * EmailReceiver constructor.
-     * @param EmailSender $sender
+     * @param MailSender $sender
      */
-    public function __construct(EmailSender $sender)
+    public function __construct(MailSender $sender)
     {
         $this->connection = $this->getConnection();
         $this->sender = $sender;
     }
 
+    /**
+     * @param AMQPMessage $message
+     * @return AMQPMessage $message
+     */
     public function receive($message)
     {
         $callback = function() use ($message)
@@ -35,7 +40,9 @@ class EmailReceiver extends AMQPHandler
             $this->sender->send($data);
 
             $message->delivery_info('channel')
-                ->basic_ack($message->delivery_info('delivery_tag'));
+                    ->basic_ack(
+                        $message->delivery_info('delivery_tag')
+                    );
 
         };
 

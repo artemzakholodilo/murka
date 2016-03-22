@@ -81,6 +81,11 @@ class SiteController extends Controller
         );
     }
 
+    public function logoutAction()
+    {
+        return $this->redirectToRoute('site');
+    }
+
     /**
      * @param User $user
      * @param Request $request

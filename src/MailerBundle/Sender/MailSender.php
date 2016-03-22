@@ -2,11 +2,17 @@
 
 namespace MailerBundle\Sender;
 
-use MailerBundle\Entity\Notification;
-
-class EmailSender extends AbstractSender
+class MailSender extends AbstractSender
 {
+    /**
+     * @var \Swift_Mailer
+     */
     protected $transport;
+
+    /**
+     * @var string
+     */
+    private $userMail;
 
     /**
      * EmailSender constructor.
@@ -20,6 +26,7 @@ class EmailSender extends AbstractSender
         $password
     )
     {
+        $this->userMail = $name;
         $transport = \Swift_SmtpTransport::newInstance('gmail')
             ->setUsername($name)
             ->setPassword($password);
@@ -28,11 +35,19 @@ class EmailSender extends AbstractSender
     }
 
     /**
-     * @param Notification $notification
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->userMail;
+    }
+
+    /**
+     * @param array $notification
+     * @return null
      */
     public function send($notification)
     {
-
         $message = \Swift_Message::newInstance($notification['subject'])
             ->setFrom([$notification['from']])
             ->setTo([$notification['to']])
