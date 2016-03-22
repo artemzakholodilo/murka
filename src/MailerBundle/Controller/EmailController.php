@@ -4,25 +4,32 @@ namespace MailerBundle\Controller;
 
 use MailerBundle\Entity\EmailHandler\EmailReceiver;
 use MailerBundle\Entity\EmailHandler\EmailSender;
-use MailerBundle\Sender\EmailSender as Sender;
+use MailerBundle\Sender\AbstractSender;
 use MailerBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class EmailController extends Controller
 {
     /**
-     * @var Sender
+     * @var AbstractSender
      */
     private $sender;
 
     /**
      * EmailController constructor.
-     * @param Sender $sender
+     * @param AbstractSender $sender
+     * @param ContainerInterface $container
      */
-    public function __construct(Sender $sender)
+    public function __construct
+    (
+        AbstractSender $sender,
+        ContainerInterface $container
+    )
     {
         $this->sender = $sender;
+        $this->container = $container;
     }
 
     /**
@@ -41,7 +48,7 @@ class EmailController extends Controller
     {
         $notification = new Notification();
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $notification->setBody($request->request->get('subject'), $user->getUsername());
+        $notification->setBody($request->request->get('subject'), $user);
         $notification->setSubject($request->request->get('body'));
 
         $amqpSender = new EmailSender();
@@ -49,6 +56,8 @@ class EmailController extends Controller
 
         $receiver = new EmailReceiver($this->sender);
         $receiver->receive($message);
+
+        var_dump($message); exit;
 
         try {
             $this->sender->send($notification);

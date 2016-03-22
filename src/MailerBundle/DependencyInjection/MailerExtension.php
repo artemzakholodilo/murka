@@ -22,16 +22,13 @@ class MailerExtension extends Extension
     {
         $container->setDefinition('mailer.emailsender', new Definition('MailerBundle\Sender\EmailSender',[
             new Reference('swiftmailer.mailer'),
-            new Reference('swiftmailer.transport'),
             $container->getParameter('mailer_user'),
             $container->getParameter('mailer_password')
         ]));
 
         $container->setDefinition('mailer.email_controller', new Definition('MailerBundle\Controller\EmailController',[
-            new Reference('mailer.emailsender')]));
-
-        $container->setDefinition('email.sender', new Definition('MailerBundle\Sender\EmailSender'. [
-
-            ]));
+            new Reference('mailer.emailsender'),
+            new Reference('service_container')
+        ]));
     }
 }
