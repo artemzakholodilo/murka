@@ -21,6 +21,8 @@ class EmailController extends Controller
      * EmailController constructor.
      * @param AbstractSender $sender
      * @param ContainerInterface $container
+     * Странно, но если не заинклюдить контейнер, то выдает
+     * Error: Call to a member function get() on null
      */
     public function __construct
     (

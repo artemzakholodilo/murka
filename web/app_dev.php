@@ -8,6 +8,9 @@ use Symfony\Component\Debug\Debug;
 // for more information
 //umask(0000);
 
+ini_set("display_errors", 1);
+error_reporting(E_ALL | E_STRICT);
+
 // This check prevents access to debug front controllers that are deployed by accident to production servers.
 // Feel free to remove this, extend it, or make something more sophisticated.
 if (isset($_SERVER['HTTP_CLIENT_IP'])

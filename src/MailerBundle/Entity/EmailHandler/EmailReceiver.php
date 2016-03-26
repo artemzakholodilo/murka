@@ -30,7 +30,6 @@ class EmailReceiver extends AMQPHandler
 
     /**
      * @param AMQPMessage $message
-     * @return AMQPMessage $message
      */
     public function receive(AMQPMessage $message)
     {
@@ -38,12 +37,6 @@ class EmailReceiver extends AMQPHandler
         {
             $data = json_decode($message->body, true);
             $this->sender->send($data);
-
-            /*$message->delivery_info('channel')
-                    ->basic_ack(
-                        $message->delivery_info('delivery_tag')
-                    );*/
-
         };
 
         $this->connection->basic_qos(null, 1, null);
@@ -52,7 +45,5 @@ class EmailReceiver extends AMQPHandler
         while(count($this->connection->callbacks)) {
             $this->connection->wait();
         }
-
-        return $message;
     }
 }
