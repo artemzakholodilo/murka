@@ -54,25 +54,16 @@ class EmailController extends Controller
 
         $data = $notification->toJson($this->sender->getMail());
 
-        $amqpSender = new EmailSender();
-        $message = $amqpSender->send($data);
+        try {
+            $amqpSender = new EmailSender();
+            $message = $amqpSender->send($data);
 
-        $receiver = new EmailReceiver($this->sender);
-        $receiver->receive($message);
-
-        /*try {
-            $this->sender->send($notification);
+            $receiver = new EmailReceiver($this->sender);
+            $receiver->receive($message);
         } catch (\Exception $ex) {
-            $this->render('MailerBundle:Email:error.html.twig', [
-                'message' => $ex->getMessage()
-            ]);
-        }*/
+            $this->render('MailerBundle:Email:error.html.twig');
+        }
 
-        $this->redirectToRoute('email_success');
-    }
-
-    public function successAction()
-    {
-        return $this->render('MailerBundle:Email:success.html.twig');
+        $this->render('MailerBundle:Email:success.html.twig');
     }
 }

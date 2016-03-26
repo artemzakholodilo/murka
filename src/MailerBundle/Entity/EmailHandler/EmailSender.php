@@ -21,11 +21,14 @@ class EmailSender extends AMQPHandler
     }
 
     /**
-     * @param $message (json)
+     * @param $message
+     * @return AMQPMessage
      */
     public function send($message)
     {
         $message = new AMQPMessage($message, ['delivery_mode' => 2]);
         $this->connection->basic_publish($message, '', 'email_queue');
+
+        return $message;
     }
 }
