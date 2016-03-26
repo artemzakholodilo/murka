@@ -59,11 +59,15 @@ class EmailController extends Controller
             $message = $amqpSender->send($data);
 
             $receiver = new EmailReceiver($this->sender);
+            // echo "<pre>";
+            // print_r($message); exit;
             $receiver->receive($message);
         } catch (\Exception $ex) {
-            $this->render('MailerBundle:Email:error.html.twig');
+            return $this->render('MailerBundle:Email:error.html.twig', [
+                'error' => $ex->getMessage()
+            ]);
         }
 
-        $this->render('MailerBundle:Email:success.html.twig');
+        return $this->render('MailerBundle:Email:success.html.twig');
     }
 }

@@ -27,7 +27,7 @@ class MailSender extends AbstractSender
     )
     {
         $this->userMail = $name;
-        $transport = \Swift_SmtpTransport::newInstance('gmail')
+        $transport = \Swift_SmtpTransport::newInstance("smtp.gmail.com", 465, "ssl")
             ->setUsername($name)
             ->setPassword($password);
 

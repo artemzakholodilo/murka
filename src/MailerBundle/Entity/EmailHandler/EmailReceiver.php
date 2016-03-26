@@ -32,17 +32,17 @@ class EmailReceiver extends AMQPHandler
      * @param AMQPMessage $message
      * @return AMQPMessage $message
      */
-    public function receive($message)
+    public function receive(AMQPMessage $message)
     {
         $callback = function() use ($message)
         {
             $data = json_decode($message->body, true);
             $this->sender->send($data);
 
-            $message->delivery_info('channel')
+            /*$message->delivery_info('channel')
                     ->basic_ack(
                         $message->delivery_info('delivery_tag')
-                    );
+                    );*/
 
         };
 
