@@ -10,11 +10,6 @@ class MailSender extends AbstractSender
     protected $transport;
 
     /**
-     * @var string
-     */
-    private $userMail;
-
-    /**
      * EmailSender constructor.
      * @param \Swift_Mailer $mailer
      * @param $name
@@ -26,20 +21,11 @@ class MailSender extends AbstractSender
         $password
     )
     {
-        $this->userMail = $name;
         $transport = \Swift_SmtpTransport::newInstance("smtp.gmail.com", 465, "ssl")
             ->setUsername($name)
             ->setPassword($password);
 
         $this->transport = $mailer::newInstance($transport);
-    }
-
-    /**
-     * @return string
-     */
-    public function getMail()
-    {
-        return $this->userMail;
     }
 
     /**

@@ -28,12 +28,9 @@ class EmailReceiver extends AMQPHandler
         $this->sender = $sender;
     }
 
-    /**
-     * @param AMQPMessage $message
-     */
-    public function receive(AMQPMessage $message)
+    public function listen()
     {
-        $callback = function() use ($message)
+        $callback = function($message)
         {
             $data = json_decode($message->body, true);
             $this->sender->send($data);

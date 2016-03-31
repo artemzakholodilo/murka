@@ -27,8 +27,8 @@ class MailerExtension extends Extension
         ]));
 
         $container->setDefinition('mailer.email_controller', new Definition('MailerBundle\Controller\EmailController',[
-            new Reference('mailer.emailsender'),
-            new Reference('service_container')
+            new Reference('service_container'),
+            $container->getParameter('mailer_user')
         ]));
     }
 }

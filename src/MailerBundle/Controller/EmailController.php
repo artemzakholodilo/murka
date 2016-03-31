@@ -2,9 +2,7 @@
 
 namespace MailerBundle\Controller;
 
-use MailerBundle\Entity\EmailHandler\EmailReceiver;
 use MailerBundle\Entity\EmailHandler\EmailSender;
-use MailerBundle\Sender\AbstractSender;
 use MailerBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -13,25 +11,22 @@ use Symfony\Component\HttpFoundation\Request;
 class EmailController extends Controller
 {
     /**
-     * @var AbstractSender
+     * @var string email address from what mail be send
      */
-    private $sender;
+    private $transportEmail;
 
     /**
      * EmailController constructor.
-     * @param AbstractSender $sender
      * @param ContainerInterface $container
-     * Странно, но если не заинклюдить контейнер, то выдает
-     * Error: Call to a member function get() on null
+     * @param $transportEmail
      */
-    public function __construct
-    (
-        AbstractSender $sender,
-        ContainerInterface $container
+    public function __construct(
+        ContainerInterface $container,
+        $transportEmail
     )
     {
-        $this->sender = $sender;
-        $this->container = $container;
+        $this->setContainer($container);
+        $this->transportEmail = $transportEmail;
     }
 
     /**
@@ -48,28 +43,48 @@ class EmailController extends Controller
      */
     public function sendAction(Request $request)
     {
-        $notification = new Notification();
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $notification->setBody($request->request->get('subject'), $user);
-        $notification->setSubject($request->request->get('body'));
-        $notification->setTo($request->request->get('to'));
+        $user = $this->container->get('security.token_storage')
+                     ->getToken()->getUser();
+        $notification = $this->getNotification($request, $user);
+        $notification->setNotificationBodyData();
 
-        $data = $notification->toJson($this->sender->getMail());
+        $validator = $this->get('validator');
+        $errors = $validator->validate($notification);
+
+        count($errors) == 0 ? : $this->render(
+            'MailerBundle:Email:index.html.twig',
+            ['errors' => $errors]
+        );
+
+        $data = $notification->toJson($this->transportEmail);
 
         try {
             $amqpSender = new EmailSender();
-            $message = $amqpSender->send($data);
-
-            $receiver = new EmailReceiver($this->sender);
-            // echo "<pre>";
-            // print_r($message); exit;
-            $receiver->receive($message);
+            $amqpSender->send($data);
         } catch (\Exception $ex) {
-            return $this->render('MailerBundle:Email:error.html.twig', [
-                'error' => $ex->getMessage()
+            return $this->render('MailerBundle:Email:index.html.twig', [
+                'errors' => [
+                    'Error something went wrong. Please try agin later'
+                ]
             ]);
         }
 
         return $this->render('MailerBundle:Email:success.html.twig');
+    }
+
+    /**
+     * @param Request $request
+     * @param $user
+     * @return Notification
+     */
+    private function getNotification(Request $request, $user)
+    {
+        $notification = new Notification();
+        $notification->setBody($request->request->get('body'));
+        $notification->setFrom($user);
+        $notification->setSubject($request->request->get('subject'));
+        $notification->setTo($request->request->get('to'));
+
+        return $notification;
     }
 }

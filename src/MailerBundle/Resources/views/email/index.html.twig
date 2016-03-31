@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if errors is defined %}
+        <div class="row">
+            <div class="col s10 offset-s2">
+                <h3>En error occured. Email has not been send.</h3>
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
     <div class="row">
         <div class="col s12">
         <form action="{{ path('send_email') }}" method="post">
@@ -34,4 +44,5 @@
         </form>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
